@@ -25,7 +25,8 @@ public class BreathingDevice {
     }
 
     public BreathingDevice(){
-        new BreathingDevice(0,0);
+        this.tanks=getTanks();
+        this.size=getSize();
     }
 
     public String toString(){

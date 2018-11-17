@@ -58,7 +58,15 @@ public class DivingGUI { //This contains global references, buttons and text fie
 
         public void actionPerformed(ActionEvent click){ //This part of the program contains methods to handle clicked button events
 
-            
+            if(click.getSource()==createProfileButton){//Method to create diver's profile
+                 }
+            if(click.getSource()==planDiveButton){//Method to create dive
+                 }
+            if(click.getSource()==showRdpButton){//Method to show RDP table
+            }
+            if(click.getSource()==showLogButton){//Method to show dive log
+            }
+
 
 
         }

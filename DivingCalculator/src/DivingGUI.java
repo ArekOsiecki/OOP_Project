@@ -23,7 +23,7 @@ public class DivingGUI { //This contains global references, buttons and text fie
         JButton okButton = new JButton("OK");
         JButton eraseButton = new JButton("Erase");//Buttons for GUI
         JTextArea logArea,RDPArea; //Text areas
-        String divePlace, diveDate, diverName;
+        String divePlace, diveDate, diverName,diverAgeText,diverSacText;
         int diverAge,diverSac,diverExp,diveDepth,diveLength,deviceTanks,deviceSize,deviceFilter;
         boolean isReabreather; //Attributes for classes
 
@@ -31,8 +31,9 @@ public class DivingGUI { //This contains global references, buttons and text fie
     public DivingGUI() { //Code for GUI creation and event handler registration
 
         JFrame guiFrame = new JFrame("Dive Planner");
-        GridLayout guiFlow = new GridLayout(); //Creating a grid layout to contain buttons in two rows
-        guiFrame.setLayout(guiFlow);
+        guiFrame.setVisible(true);
+        GridLayout guiLayout = new GridLayout(2,2); //Creating a grid layout to contain buttons in two rows
+        guiFrame.setLayout(guiLayout);
         guiFrame.setSize(500,500);
         guiFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);//Setting exit method
 
@@ -83,9 +84,9 @@ public class DivingGUI { //This contains global references, buttons and text fie
 
     public class EventHandler implements ActionListener {
 
-        public void actionPerformed(ActionEvent click){ //This part of the program contains methods to handle clicked button events
+        public void actionPerformed(ActionEvent clickMenu){ //This part of the program contains methods to handle main menu clicked button events
 
-            if(click.getSource()==createProfileButton){//Method to create diver's profile
+            if(clickMenu.getSource()==createProfileButton){//Method to create diver's profile
 
                 JLabel nameLabel = new JLabel("Enter name: ");
                 nameLabel.setVisible(true);
@@ -95,12 +96,12 @@ public class DivingGUI { //This contains global references, buttons and text fie
                 JLabel ageLabel = new JLabel("Enter age: ");
                 ageLabel.setVisible(true);
                 JTextField ageText = new JTextField(20);
-                diverAge = Integer.parseInt(ageText.getText());
+                diverAgeText = ageText.getText();
 
                 JLabel sacLabel = new JLabel("Enter SAC: ");
                 sacLabel.setVisible(true);
                 JTextField sacText = new JTextField(20);
-                diverSac = Integer.parseInt(sacText.getText());//Creating fields for user input and corresponding labels and retrieving input
+                diverSacText = sacText.getText();//Creating fields for user input and corresponding labels, assigning attributes to input
 
                 JLabel experienceLabel = new JLabel("Which certificate do you have?: ");
                 experienceLabel.setVisible(true);
@@ -109,33 +110,35 @@ public class DivingGUI { //This contains global references, buttons and text fie
                 profileDropDown.setVisible(true);
                 diverExp = profileDropDown.getSelectedIndex();// Creating dropdown list of choices and retrieving input
 
+
                 JFrame profileFrame = new JFrame("Create profile");
-                GroupLayout profileFlow = new GroupLayout(profileFrame);//Using group layout to combine text boxes and drop down list
-                profileFrame.setLayout(profileFlow);
-                profileFlow.setAutoCreateContainerGaps(true); //Method to create gaps between components and edges of the frame
-                profileFlow.setAutoCreateGaps(true); //Method to create gaps between components
+                profileFrame.setVisible(true);
+                GridLayout profileLayout = new GridLayout(3,2);//Using grid layout to combine text boxes, drop down list and buttons
+                profileFrame.setLayout(profileLayout);
                 profileFrame.setSize(400,400);
                 profileFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-                GroupLayout.SequentialGroup profileBoxesLabels =  profileFlow.createSequentialGroup();//creating a sequential group to align components
-                profileBoxesLabels.addGroup(profileFlow.createParallelGroup().addComponent(nameLabel)
-                        .addComponent(ageLabel).addComponent(sacLabel).addComponent(experienceLabel));
-                profileBoxesLabels.addGroup(profileFlow.createParallelGroup().addComponent(nameText)
-                        .addComponent(ageText).addComponent(sacText).addComponent(profileDropDown));//Adding components in parallel groups along horizontal axis
-                profileFlow.setHorizontalGroup(profileBoxesLabels);
+                profileFrame.add(nameLabel);
+                profileFrame.add(nameText);
+                profileFrame.add(ageLabel);
+                profileFrame.add(ageText);
+                profileFrame.add(sacLabel);
+                profileFrame.add(sacText);
+                profileFrame.add(experienceLabel);
+                profileFrame.add(profileDropDown);
+                profileFrame.add(confirmButton);
+                profileFrame.add(cancelButton); //adding components to layout
 
-                GroupLayout.SequentialGroup profileButtons  = profileFlow.createSequentialGroup();//creating a sequential group to align buttons vertically at the bottom of the frame
-                profileButtons.addGroup(profileFlow.createSequentialGroup().addComponent(confirmButton).addComponent(cancelButton));
-                profileFlow.setVerticalGroup(profileButtons);
-
-
+                EventHandler profileButton = new EventHandler();
+                confirmButton.addActionListener(profileButton);
+                cancelButton.addActionListener(profileButton); //listeners for profile frame
 
                  }
-            if(click.getSource()==planDiveButton){//Method to create dive
+            if(clickMenu.getSource()==planDiveButton){//Method to create dive
                  }
-            if(click.getSource()==showRdpButton){//Method to show RDP table
+            if(clickMenu.getSource()==showRdpButton){//Method to show RDP table
             }
-            if(click.getSource()==showLogButton){//Method to show dive log
+            if(clickMenu.getSource()==showLogButton){//Method to show dive log
             }
 
 

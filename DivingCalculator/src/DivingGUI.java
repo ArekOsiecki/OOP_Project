@@ -6,10 +6,13 @@
   * Program also creates the dive log that can be viewed.*/
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.EventHandler;
+
+import static java.lang.System.exit;
 
 public class DivingGUI implements ActionListener{ //This contains global references, buttons and text fields creation code
 
@@ -29,7 +32,7 @@ public class DivingGUI implements ActionListener{ //This contains global referen
         boolean isReabreather; //Attributes for classes
 
 
-    public DivingGUI() { //Code for GUI creation and event handler registration
+    public DivingGUI() { //Code for GUI creation
 
         JFrame guiFrame = new JFrame("Dive Planner");
         guiFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);//Setting exit method
@@ -58,6 +61,7 @@ public class DivingGUI implements ActionListener{ //This contains global referen
         guiFrame.setJMenuBar(guiMenuBar);
 
         guiFrame.setSize(320,640);
+        guiFrame.setLocationRelativeTo(null);
         guiFrame.setVisible(true); //adding menu bar to frame, setting visibility and size
     }
 
@@ -73,73 +77,7 @@ public class DivingGUI implements ActionListener{ //This contains global referen
 
         if(actionEvent.getSource()==createProfile){
 
-            JMenu profileGridMenu = new JMenu("Profile Menu");
-            profileGridMenu.setVisible(true);
-
-            JLabel nameLabel = new JLabel("Enter name: ");
-            nameLabel.setBorder(BorderFactory.createEmptyBorder(5,10,0,0));
-            nameLabel.setVisible(true);
-            JTextField nameText = new JTextField(20);
-            diverName = nameText.getText();
-
-            JLabel ageLabel = new JLabel("Enter age: ");
-            ageLabel.setBorder(BorderFactory.createEmptyBorder(5,10,0,0));
-            ageLabel.setVisible(true);
-            JTextField ageText = new JTextField(20);
-            diverAgeText = ageText.getText();
-
-            JLabel sacLabel = new JLabel("Enter SAC: ");
-            sacLabel.setBorder(BorderFactory.createEmptyBorder(5,10,0,0));
-            sacLabel.setVisible(true);
-            JTextField sacText = new JTextField(20);
-            diverSacText = sacText.getText();//Creating fields for user input and corresponding labels, assigning attributes to input
-
-            JLabel experienceLabel = new JLabel("Certificate level ");
-            experienceLabel.setVisible(true);
-            experienceLabel.setBorder(BorderFactory.createEmptyBorder(5,10,0,0));
-            String [] choices = {"Open Water Diver","Advanced Diver","Divemaster"};
-            final JComboBox<String> profileDropDown = new JComboBox<>(choices);
-            profileDropDown.setVisible(true);
-            profileDropDown.setEditable(false);
-            diverExp = profileDropDown.getSelectedIndex();//Creating drop down list, setting it to be uneditable by user and retrieving input
-
-
-            //add exceptions to methods, change buttons and textbox layout
-            JButton confirmButton = new JButton("Confirm");
-            JButton cancelButton = new JButton("Cancel");
-
-
-            confirmButton.addActionListener(e -> {
-                JOptionPane.showMessageDialog(null, "Profile created","Success",JOptionPane.INFORMATION_MESSAGE);
-                Diver profile = new Diver (diverName,diverAge,diverSac,diverExp);
-            });
-
-            cancelButton.addActionListener(e -> {
-                JOptionPane.showMessageDialog(null, "Profile creation canceled","Canceled",JOptionPane.WARNING_MESSAGE);
-            });//adding action listeners to buttons using lambda statements
-
-
-            JFrame profileFrame = new JFrame("Profile");
-            GridLayout profileFrameLayout = new GridLayout(0,2,20,1);
-            profileFrame.setLayout(profileFrameLayout);
-            profileFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
-            profileFrame.add(nameLabel);
-            profileFrame.add(nameText);
-            profileFrame.add(ageLabel);
-            profileFrame.add(ageText);
-            profileFrame.add(sacLabel);
-            profileFrame.add(sacText);
-            profileFrame.add(experienceLabel);
-            profileFrame.add(profileDropDown);
-            profileFrame.add(confirmButton,BorderLayout.SOUTH);
-            profileFrame.add(cancelButton,BorderLayout.SOUTH); //adding components to layout
-
-            profileFrame.setJMenuBar(guiMenuBar);
-            profileFrame.setVisible(true);
-            profileFrame.setSize(320,640);//adding menu bar to frame, setting visibility and size
-
-
+            new ProfileFrame();//?
 
         }
         if(actionEvent.getSource()==updateProfile){
@@ -156,5 +94,7 @@ public class DivingGUI implements ActionListener{ //This contains global referen
         }
 
     }
+
+
 
 }

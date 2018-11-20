@@ -1,13 +1,16 @@
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.util.IllegalFormatException;
 
-public class ProfileFrame extends DivingGUI {
+public class ProfileFrame extends DivingGUI{
+
+
     public static void main(String[] args) {
 
-        String divePlace, diveDate, diverName,diverAgeText,diverSacText;
-        int diverAge,diverSac,diverExp,diveDepth,diveLength,deviceTanks,deviceSize,deviceFilter;
-        boolean isReabreather;
+        String diverName,diverAgeText,diverSacText;
+        int diverAge,diverSac,diverExp;
+
 
         JFrame profileFrame = new JFrame("Create Profile");
         GridLayout profileFrameLayout = new GridLayout(0,1);
@@ -22,6 +25,32 @@ public class ProfileFrame extends DivingGUI {
         JTextField nameText = new JTextField(20);
         nameText.setBorder(BorderFactory.createTitledBorder("Enter name"));
         diverName = nameText.getText();
+        boolean validName=false;
+
+        while(!validName){
+
+
+            try{
+
+                String[] fullName = nameText.getText().split(" ");
+                String name = fullName[0];
+                String surname = fullName[1];
+
+                for(int i = 0;i<fullName.length;i++){
+                    if(!Character.isLetter(name.charAt(i)) || !Character.isLetter(surname.charAt(i))) {
+                        throw new IllegalArgumentException("Name must contain only letters!");
+
+
+                    }
+                }
+
+                validName = true;
+            }catch (IllegalFormatException e){
+                JOptionPane.showMessageDialog(null," "+diverName+" is invalid\nPlease enter only letters!");
+
+            }
+
+        }
 
         JTextField ageText = new JTextField(20);
         ageText.setBorder(BorderFactory.createTitledBorder("Enter age"));

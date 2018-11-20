@@ -23,14 +23,14 @@ public class DivingGUI implements ActionListener{ //This contains global referen
         JMenu diveMenu = new JMenu("Dive Menu");
         JMenu rdpMenu = new JMenu("Check Deco Table");
         JMenuItem createProfile = new JMenuItem("Create Profile");
-        JMenuItem updateProfile = new JMenuItem("Update Profile");
         JMenuItem planDive = new JMenuItem("Plan dive");
         JMenuItem showDiveLog = new JMenuItem("Show dive log");
         JMenuItem showRDP = new JMenuItem("Show RDP Table");//declaration of menu, menu bar and items
         JTextArea logArea,RDPArea; //Text areas
-        String divePlace, diveDate, diverName,diverAgeText,diverSacText;
+        String divePlace, diveDate,nameU, diverName,diverAgeText,diverSacText;
         int diverAge,diverSac,diverExp,diveDepth,diveLength,deviceTanks,deviceSize,deviceFilter;
         boolean isReabreather; //Attributes for classes
+
 
 
     public DivingGUI() { //Code for GUI creation
@@ -41,8 +41,6 @@ public class DivingGUI implements ActionListener{ //This contains global referen
         profileMenu.add(createProfile);
         createProfile.addActionListener(this);//adding items to menus and registering listeners
 
-        profileMenu.add(updateProfile);
-        updateProfile.addActionListener(this);
 
         diveMenu.add(planDive);
         planDive.addActionListener(this);
@@ -63,13 +61,15 @@ public class DivingGUI implements ActionListener{ //This contains global referen
 
         guiFrame.setSize(320,640);
         guiFrame.setLocationRelativeTo(null);
-        guiFrame.setVisible(true); //adding menu bar to frame, setting visibility and size
+        guiFrame.setVisible(true);
+        guiFrame.setFocusable(true);//adding menu bar to frame, setting visibility and size
     }
 
 
     public static void main(String args[]){
 
         DivingGUI divingApp= new DivingGUI(); //GUI instantiation
+
 
     }
 
@@ -78,82 +78,9 @@ public class DivingGUI implements ActionListener{ //This contains global referen
 
         if(actionEvent.getSource()==createProfile){
 
-            JFrame profileFrame = new JFrame("Create Profile");
-            GridLayout profileFrameLayout = new GridLayout(0,1);
-            profileFrame.setLayout(profileFrameLayout);
-            profileFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
-
-            JMenu profileGridMenu = new JMenu("Profile Menu");
-            profileGridMenu.setVisible(true);
-
-
-            JTextField nameText = new JTextField(20);
-            nameText.setBorder(BorderFactory.createTitledBorder("Enter name"));
-
-
-            JTextField ageText = new JTextField(20);
-            ageText.setBorder(BorderFactory.createTitledBorder("Enter age"));
-            diverAgeText = ageText.getText();
-
-
-            JTextField sacText = new JTextField(20);
-            sacText.setBorder(BorderFactory.createTitledBorder("Enter SAC"));
-            diverSacText = sacText.getText();//Creating fields for user input and corresponding labels, assigning attributes to input
-
-            String [] choices = {"Open Water Diver","Advanced Diver","Divemaster"};
-            final JComboBox<String> profileDropDown = new JComboBox<>(choices);
-            profileDropDown.setBorder(BorderFactory.createTitledBorder("Experience level"));
-            profileDropDown.setVisible(true);
-            profileDropDown.setEditable(false);
-            //Creating drop down list, setting it to be uneditable by user and retrieving input
-
-
-            //add exceptions to methods, change buttons and textbox layout
-            JPanel buttonsPanel = new JPanel();
-            buttonsPanel.setBorder(new EmptyBorder(15,15,15,15));
-            GridLayout buttonsLayout = new GridLayout(0,2,25,0);
-            buttonsPanel.setLayout(buttonsLayout);
-
-            JButton confirmButton = new JButton("Confirm");
-            JButton cancelButton = new JButton("Cancel");
-
-
-            confirmButton.addActionListener(e -> {
-                JOptionPane.showMessageDialog(null, "Profile created","Success",JOptionPane.INFORMATION_MESSAGE);
-                diverSac = Integer.parseInt(diverSacText);
-                diverAge = Integer.parseInt(diverAgeText);
-                diverExp = profileDropDown.getSelectedIndex();
-                Diver profile = new Diver (diverName,diverAge,diverSac,diverExp);
-            });
-
-            cancelButton.addActionListener(e -> {
-                JOptionPane.showMessageDialog(null, "Profile creation canceled","Canceled",JOptionPane.WARNING_MESSAGE);
-                //profileFrame.setVisible(false);//disposing of current frame
-                //profileFrame.setDefaultCloseOperation((actionPerformed((int)e.getSource() ==cancelButton);
-
-            });//adding action listeners to buttons using lambda statements
-
-            buttonsPanel.add(confirmButton);
-            buttonsPanel.add(cancelButton);
-
-            profileFrame.add(nameText);
-            profileFrame.add(ageText);
-            profileFrame.add(sacText);
-            profileFrame.add(profileDropDown);
-            profileFrame.add(buttonsPanel);//adding components to layout
-
-
-            profileFrame.setLocationRelativeTo(null);
-            //how to make every frame appear exactly in the middle of the screen?
-            profileFrame.setVisible(true);
-            profileFrame.setSize(320,640);//adding menu bar to frame, setting visibility and size
-
-
+             new ProfileFrame();
         }
-        if(actionEvent.getSource()==updateProfile){
 
-        }
         if(actionEvent.getSource()==planDive){
 
         }
@@ -164,8 +91,35 @@ public class DivingGUI implements ActionListener{ //This contains global referen
 
         }
 
+
+
     }
 
 
+
+
+  /*  public static String nameValidation (String name) throws IllegalArgumentException {
+        int spaceIndex = name.indexOf(' ');
+        String validName ="";
+
+        boolean isValidName = false;
+
+        while (!isValidName)
+            try{
+            for (int i = 0; i <= name.length() - 1; i++) {
+
+                if (!Character.isLetter(name.charAt(i))) {
+                    throw new IllegalArgumentException("Name must contain only letters!");
+
+                }else{
+                            validName = name;
+                 }
+                }
+
+            } catch (IllegalArgumentException nameException) {
+            JOptionPane.showMessageDialog(null, nameException, "Name incorrect", JOptionPane.WARNING_MESSAGE);
+            }
+        return validName;
+    }*/
 
 }

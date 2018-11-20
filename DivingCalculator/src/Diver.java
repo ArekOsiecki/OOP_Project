@@ -1,10 +1,10 @@
 public class Diver {
 
-
         private String name;
         private int age;
         private int sac; //SAC(Surface air consumption) is a unit of measure used to determine amount of air needed for particular dive in bars per minute
-        public int experienceLevel; //Different experience levels allow for different depths
+        private int experienceLevel; //Different experience levels allow for different depths
+        private BreathingDevice b;
 
     public String getName() {
         return name;

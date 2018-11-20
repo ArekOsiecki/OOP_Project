@@ -1,28 +1,21 @@
 public class Rebreather extends BreathingDevice{
 
-    private boolean isRebreather; //Device used by experienced divers that requires different calculations of required composition of breathing gas
-    private int filterUnit;
+    //private boolean isRebreather; //Device used by experienced divers that requires different calculations of required composition of breathing gas
+    private int filterUnitCapacity;
 
 
-    public boolean isRebreather() {
-        return isRebreather;
-    }
 
     public int getFilterUnit() {
-        return filterUnit;
+        return filterUnitCapacity;
     }
 
-    public void setRebreather(boolean isRebreather) {
-        isRebreather = true;
-    }
 
     public void setFilterUnit(int filterUnit) {
-        this.filterUnit = filterUnit;
+        this.filterUnitCapacity = filterUnit;
     }
 
     public Rebreather(int tanks, int size, boolean isRebreather){
         super(tanks = 2, size = 3);
-        setRebreather(true);
         setFilterUnit(3);
 
     }

@@ -15,7 +15,7 @@ public class profileMethods {
                 for (int i = 0; i <= name.length() - 1; i++) {
 
                     if (!Character.isLetter(name.charAt(i))) {
-                        throw new IllegalArgumentException("Name must contain only letters!");
+
 
                     } else {
                         for (int j = 0; j <= surname.length(); j++) {

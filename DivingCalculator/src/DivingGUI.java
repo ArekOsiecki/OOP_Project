@@ -70,15 +70,16 @@ public class DivingGUI implements ActionListener{ //This contains global referen
 
         DivingGUI divingApp= new DivingGUI(); //GUI instantiation
 
-
     }
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
 
+
         if(actionEvent.getSource()==createProfile){
 
              new ProfileFrame();
+
         }
 
         if(actionEvent.getSource()==planDive){

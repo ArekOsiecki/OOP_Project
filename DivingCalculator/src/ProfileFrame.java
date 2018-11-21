@@ -1,6 +1,7 @@
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.util.IllegalFormatException;
 
 public class ProfileFrame {
 
@@ -53,7 +54,7 @@ public class ProfileFrame {
         diverExp = profileDropDown.getSelectedIndex();//Creating drop down list, setting it to be uneditable by user and retrieving input
 
 
-        //add exceptions to methods, change buttons and textbox layout
+        //add exceptions to methods
         JPanel buttonsPanel = new JPanel();
         buttonsPanel.setBorder(new EmptyBorder(15, 15, 15, 15));
         GridLayout buttonsLayout = new GridLayout(0, 2, 25, 0);
@@ -73,22 +74,42 @@ public class ProfileFrame {
 
 
         profileFrame.setLocationRelativeTo(null);
-        //how to make every frame appear exactly in the middle of the screen?
+        //how to make every frame appear exactly in the middle of the screen? turn off previous frame
         profileFrame.setVisible(true);
-        profileFrame.setLocationRelativeTo(null);
         profileFrame.setSize(320, 640);//adding menu bar to frame, setting visibility and size
 
 
         confirmButton.addActionListener(e -> {
 
+            boolean valid = false;
             diverSac = Integer.parseInt(diverSacText);
-            diverAge = Integer.parseInt(diverAgeText);
+
 
             //do validation now before object creation
-           /* while(!valid)
+           while(!valid)
             {
+                for(int i = 0; i<= diverName.length();i++){
+                    if(!Character.isLetter(diverName.charAt(i))){
+                        throw new IllegalArgumentException("Name must contain only letters!");
+                    }
+                    else{
+                        if(!Character.isDigit(diverAgeText.charAt(i))){
+                            throw new IllegalArgumentException("You must use numbers to enter age");
+                        }
+                        else{
+                            diverAge = Integer.parseInt(diverAgeText);
+                            if(diverAge < 5 || diverAge > 85){
+                                throw new IllegalArgumentException("Please enter correct age");
+                            }
+                            else{
+                                if(!Character.isDigit(diverSacText.charAt(i))){
+                                    throw new IllegalArgumentException("You must use numbers to enter SAC");
+                            }
+                        }
+                    }
+                }
 
-            }*/
+            }
             Diver profile = new Diver(diverName, diverAge, diverSac, diverExp);
 
             JOptionPane.showMessageDialog(profileFrame, "Profile created", "Success", JOptionPane.INFORMATION_MESSAGE);
@@ -96,7 +117,7 @@ public class ProfileFrame {
 
         cancelButton.addActionListener(e -> {
             JOptionPane.showMessageDialog(profileFrame, "Profile creation canceled", "Canceled", JOptionPane.WARNING_MESSAGE);
-            profileFrame.dispose();//disposing of current frame
+            profileFrame.setVisible(false);//disposing of current frame
 
         });//adding action listeners to buttons using lambda statements
 

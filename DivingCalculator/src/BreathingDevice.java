@@ -1,4 +1,5 @@
 public class BreathingDevice {
+
     private int tanks;
     private int size; //Volume of tanks in liters
 
@@ -25,8 +26,7 @@ public class BreathingDevice {
     }
 
     public BreathingDevice(){
-        this.tanks=getTanks();
-        this.size=getSize();
+        new BreathingDevice(0,0);
     }
 
     public String toString(){

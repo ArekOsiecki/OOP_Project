@@ -17,7 +17,7 @@ import static java.lang.System.exit;
 
 public class DivingGUI implements ActionListener{ //This contains global references, buttons and text fields creation code
 
-
+        JFrame guiFrame;
         JMenuBar guiMenuBar = new JMenuBar();
         JMenu profileMenu = new JMenu("Profile");
         JMenu diveMenu = new JMenu("Dive Menu");
@@ -35,7 +35,7 @@ public class DivingGUI implements ActionListener{ //This contains global referen
 
     public DivingGUI() { //Code for GUI creation
 
-        JFrame guiFrame = new JFrame("Dive Planner");
+        guiFrame = new JFrame("Dive Planner");
         guiFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);//Setting exit method
 
         profileMenu.add(createProfile);
@@ -79,6 +79,7 @@ public class DivingGUI implements ActionListener{ //This contains global referen
         if(actionEvent.getSource()==createProfile){
 
              new ProfileFrame();
+             guiFrame.dispose();
 
         }
 

@@ -1,15 +1,19 @@
+import org.w3c.dom.ranges.RangeException;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.util.IllegalFormatException;
+
 
 public class ProfileFrame {
 
-    String divePlace, diveDate,nameU, diverName,diverAgeText,diverSacText;
-    int diverAge,diverSac,diverExp,diveDepth,diveLength,deviceTanks,deviceSize,deviceFilter;
+    String divePlace, diveDate, nameU, diverName, diverAgeText, diverSacText;
+    int diverAge, diverSac, diverExp, diveDepth, diveLength, deviceTanks, deviceSize, deviceFilter;
     boolean isReabreather; //Attributes for classes
     JMenuBar guiMenuBar = new JMenuBar();
-
 
 
     public static void main(String[] args) {
@@ -17,8 +21,7 @@ public class ProfileFrame {
     }
 
 
-    public ProfileFrame()
-    {
+    public ProfileFrame() {
         JFrame profileFrame = new JFrame("Create Profile");
         GridLayout profileFrameLayout = new GridLayout(0, 1);
         profileFrame.setLayout(profileFrameLayout);
@@ -31,19 +34,17 @@ public class ProfileFrame {
 
         JTextField nameText = new JTextField(20);
         nameText.setBorder(BorderFactory.createTitledBorder("Enter name"));
-        diverName = nameText.getText();
-
+        //diverName = nameText.getText();
 
 
         JTextField ageText = new JTextField(20);
         ageText.setBorder(BorderFactory.createTitledBorder("Enter age"));
-        diverAgeText = ageText.getText();
-
+        //diverAgeText = ageText.getText();
 
 
         JTextField sacText = new JTextField(20);
         sacText.setBorder(BorderFactory.createTitledBorder("Enter SAC"));
-        diverSacText = sacText.getText();//Creating fields for user input and corresponding labels, assigning attributes to input
+        //diverSacText = sacText.getText();//Creating fields for user input and corresponding labels, assigning attributes to input
 
 
         String[] choices = {"Open Water Diver", "Advanced Diver", "Divemaster"};
@@ -51,7 +52,7 @@ public class ProfileFrame {
         profileDropDown.setBorder(BorderFactory.createTitledBorder("Experience level"));
         profileDropDown.setVisible(true);
         profileDropDown.setEditable(false);
-        diverExp = profileDropDown.getSelectedIndex();//Creating drop down list, setting it to be uneditable by user and retrieving input
+        //diverExp = profileDropDown.getSelectedIndex();//Creating drop down list, setting it to be uneditable by user and retrieving input
 
 
         //add exceptions to methods
@@ -73,8 +74,7 @@ public class ProfileFrame {
         //adding components to layout
 
 
-        profileFrame.setLocationRelativeTo(null);
-        //how to make every frame appear exactly in the middle of the screen? turn off previous frame
+        profileFrame.setLocationRelativeTo(guiMenuBar);
         profileFrame.setVisible(true);
         profileFrame.setSize(320, 640);//adding menu bar to frame, setting visibility and size
 
@@ -82,37 +82,56 @@ public class ProfileFrame {
         confirmButton.addActionListener(e -> {
 
             boolean valid = false;
-            diverSac = Integer.parseInt(diverSacText);
+
+            try {
+                while (!valid){
+                    if (nameText.getText().isEmpty() || sacText.getText().isEmpty() || ageText.getText().isEmpty()) {
+                        throw new RuntimeException("All fields must be entered");
+                    } else {
+                        for (char c : nameText.getText().toCharArray()) {
+                            System.out.println("You must use only letters to enter name");
+                            if (!Character.isLetter(c)) {
+                                throw new RuntimeException("You must use only letters to enter name");
+                            }
+                                for (char d : ageText.getText().toCharArray())
+                                    if (!Character.isDigit(d)) {
+                                        System.out.println("You must use numbers to enter age");
+                                        throw new RuntimeException("You must use numbers to enter age");
+                                    }
+                                        if ((Integer.parseInt(ageText.getText()) < 5 || (Integer.parseInt(ageText.getText()) > 85))) {
+                                            System.out.println("Age is " + (Integer.parseInt(ageText.getText()) + " and should be more than 6 and less than 85"));
+                                            throw new RuntimeException("Age is " + (Integer.parseInt(ageText.getText()) + " and should be more than 6 and less than 85"));
+                                        }
+                                            for (char b : sacText.getText().toCharArray())
+                                                if (!Character.isDigit(b)) {
+                                                    System.out.println("You must use numbers to enter SAC");
+                                                    throw new RuntimeException("You must use numbers to enter SAC");
+                                                }
+                                                    System.out.println("koniec");
+                                                    valid = true;
+                                                }
+                                        }
+                                    }
 
 
-            //do validation now before object creation
-           while(!valid)
-            {
-                for(int i = 0; i<= diverName.length();i++){
-                    if(!Character.isLetter(diverName.charAt(i))){
-                        throw new IllegalArgumentException("Name must contain only letters!");
-                    }
-                    else{
-                        if(!Character.isDigit(diverAgeText.charAt(i))){
-                            throw new IllegalArgumentException("You must use numbers to enter age");
-                        }
-                        else{
-                            diverAge = Integer.parseInt(diverAgeText);
-                            if(diverAge < 5 || diverAge > 85){
-                                throw new IllegalArgumentException("Please enter correct age");
-                            }
-                            else{
-                                if(!Character.isDigit(diverSacText.charAt(i))){
-                                    throw new IllegalArgumentException("You must use numbers to enter SAC");
-                            }
-                        }
-                    }
-                }
+
+
+
+            } catch (RuntimeException myException) {
+                JOptionPane.showMessageDialog(profileFrame, myException.getMessage(), "Incorrect input!", JOptionPane.WARNING_MESSAGE);
 
             }
-            Diver profile = new Diver(diverName, diverAge, diverSac, diverExp);
+            if (valid == true) {
 
-            JOptionPane.showMessageDialog(profileFrame, "Profile created", "Success", JOptionPane.INFORMATION_MESSAGE);
+                diverName = nameText.getText();
+                diverAge = Integer.parseInt(ageText.getText());
+                diverSac = Integer.parseInt(sacText.getText());
+                diverExp = profileDropDown.getSelectedIndex();
+
+                Diver profile = new Diver(diverName, diverAge, diverSac, diverExp);
+
+                JOptionPane.showMessageDialog(profileFrame, "Profile created", "Success", JOptionPane.INFORMATION_MESSAGE);
+            }
         });
 
         cancelButton.addActionListener(e -> {
@@ -124,3 +143,4 @@ public class ProfileFrame {
 
     }
 }
+

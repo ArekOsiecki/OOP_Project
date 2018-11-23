@@ -79,7 +79,7 @@ public class DivingGUI implements ActionListener{ //This contains global referen
         if(actionEvent.getSource()==createProfile){
 
              new ProfileFrame();
-             guiFrame.dispose();
+             guiFrame.setVisible(false);
 
         }
 

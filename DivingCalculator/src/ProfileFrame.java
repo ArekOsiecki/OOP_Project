@@ -47,7 +47,7 @@ public class ProfileFrame {
         //diverSacText = sacText.getText();//Creating fields for user input and corresponding labels, assigning attributes to input
 
 
-        String[] choices = {"Open Water Diver", "Advanced Diver", "Divemaster"};
+        String[] choices = {"Junior Open Water Diver","Open Water Diver", "Advanced Diver", "Divemaster"};
         final JComboBox<String> profileDropDown = new JComboBox<>(choices);
         profileDropDown.setBorder(BorderFactory.createTitledBorder("Experience level"));
         profileDropDown.setVisible(true);
@@ -80,66 +80,124 @@ public class ProfileFrame {
 
 
         confirmButton.addActionListener(e -> {
-
             boolean valid = false;
 
-            try {
-                while (!valid){
-                    if (nameText.getText().isEmpty() || sacText.getText().isEmpty() || ageText.getText().isEmpty()) {
-                        throw new RuntimeException("All fields must be entered");
-                    } else {
-                        for (char c : nameText.getText().toCharArray()) {
-                            System.out.println("You must use only letters to enter name");
-                            if (!Character.isLetter(c)) {
-                                throw new RuntimeException("You must use only letters to enter name");
-                            }
-                                for (char d : ageText.getText().toCharArray())
-                                    if (!Character.isDigit(d)) {
-                                        System.out.println("You must use numbers to enter age");
-                                        throw new RuntimeException("You must use numbers to enter age");
-                                    }
-                                        if ((Integer.parseInt(ageText.getText()) < 5 || (Integer.parseInt(ageText.getText()) > 85))) {
-                                            System.out.println("Age is " + (Integer.parseInt(ageText.getText()) + " and should be more than 6 and less than 85"));
-                                            throw new RuntimeException("Age is " + (Integer.parseInt(ageText.getText()) + " and should be more than 6 and less than 85"));
-                                        }
-                                            for (char b : sacText.getText().toCharArray())
-                                                if (!Character.isDigit(b)) {
-                                                    System.out.println("You must use numbers to enter SAC");
-                                                    throw new RuntimeException("You must use numbers to enter SAC");
-                                                }
-                                                    System.out.println("koniec");
-                                                    valid = true;
-                                                }
-                                        }
-                                    }
 
+                try {
+                    while(!valid) {
 
+                        validateName(nameText.getText());
+                        validateNumber(ageText.getText());
+                        validateAgeRange(ageText.getText());
+                        validateNumber(sacText.getText());
+                        validateSacRange(sacText.getText());
+                        validateExperience(profileDropDown.getSelectedIndex(),Integer.parseInt(ageText.getText()));
 
+                            diverName = nameText.getText();
+                            diverAge = Integer.parseInt(ageText.getText());
+                            diverSac = Integer.parseInt(sacText.getText());
+                            diverExp = profileDropDown.getSelectedIndex();
 
+                        valid = true;
 
-            } catch (RuntimeException myException) {
-                JOptionPane.showMessageDialog(profileFrame, myException.getMessage(), "Incorrect input!", JOptionPane.WARNING_MESSAGE);
-
+                        Diver diver = new Diver(diverName, diverAge, diverSac, diverExp);
+                        JOptionPane.showMessageDialog(profileFrame, "Profile created"+diver.toString()+" ", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                } catch (RuntimeException f) {
+                    JOptionPane.showMessageDialog(profileFrame, f.getMessage(), "Incorrect input!", JOptionPane.WARNING_MESSAGE);
+                }
             }
-            if (valid == true) {
-
-                diverName = nameText.getText();
-                diverAge = Integer.parseInt(ageText.getText());
-                diverSac = Integer.parseInt(sacText.getText());
-                diverExp = profileDropDown.getSelectedIndex();
-
-                Diver profile = new Diver(diverName, diverAge, diverSac, diverExp);
-
-                JOptionPane.showMessageDialog(profileFrame, "Profile created", "Success", JOptionPane.INFORMATION_MESSAGE);
-            }
-        });
+        );
 
         cancelButton.addActionListener(e -> {
-            JOptionPane.showMessageDialog(profileFrame, "Profile creation canceled", "Canceled", JOptionPane.WARNING_MESSAGE);
-            profileFrame.setVisible(false);//disposing of current frame
+            JOptionPane.showMessageDialog(profileFrame, "Leaving profile creation", "Canceled", JOptionPane.WARNING_MESSAGE);
+            profileFrame.setVisible(false);
+            new DivingGUI();//disposing of current frame
 
         });//adding action listeners to buttons using lambda statements
 
+
+    }
+
+    public String validateName(String diverName) throws RuntimeException{
+
+        boolean valid = false;
+        String nameToValidate = diverName;
+        for (char c : nameToValidate.toCharArray()) {
+            System.out.println("1");
+            if (!Character.isLetter(c)){
+                throw new RuntimeException("You must use only letters to enter name while you used "+nameToValidate+"");
+
+            }
+            else{
+                valid = true;
+            }
+        }
+        return nameToValidate;
+    }
+    public boolean validateNumber(String number) throws RuntimeException {
+
+        boolean valid = false;
+        String numberToValidate = number;
+        int validatedNumber;
+        while (!valid) {
+            for (char c : numberToValidate.toCharArray()) {
+                System.out.println("2");
+                if (!Character.isDigit(c)) {
+                    throw new RuntimeException("You must use numbers for input while you used " + numberToValidate + "");
+
+                } else {
+
+                    valid = true;
+                }
+            }
+        }
+
+        return valid;
+    }
+    public boolean validateAgeRange(String diverAgeText) throws RuntimeException{
+
+        boolean valid = false;
+        int ageRangeToValidate = Integer.parseInt(diverAgeText);
+        if(ageRangeToValidate < 10 || ageRangeToValidate > 85) {
+            System.out.println("3");
+            throw new RuntimeException("Age is " + ageRangeToValidate +" and should be more than 6 and less than 85");
+        }else{
+            valid = true;
+        }
+
+    return valid;
+}
+    public boolean validateSacRange(String diverSacText) throws RuntimeException{
+
+        boolean valid;
+        int sacRangeToValidate = Integer.parseInt(diverSacText);
+
+                    if(sacRangeToValidate < 10 || sacRangeToValidate > 25) {
+                        System.out.println("4");
+                        throw new RuntimeException("SAC is " + sacRangeToValidate+ " and should be more than 10 and less than 25");
+                    }else{
+                        valid = true;
+                    }
+
+            return valid;
+    }
+    public boolean validateExperience(int level, int age) throws RuntimeException{
+        boolean valid;
+        int levelToValidate = level;
+        int ageToValidate = age;
+        if(levelToValidate == 3 && ageToValidate<18){
+            throw new RuntimeException("You need to be at least 18 years old to become a Divemaster!");
+        }else if(levelToValidate == 2 && ageToValidate<12){
+            throw new RuntimeException("You need to be at least 12 years old to hold Advanced Certificate!");
+        }else if(levelToValidate == 1 && ageToValidate<10){
+            throw new RuntimeException("You need to be at least 10 years old to become a Open Water Diver!");
+        }else if(levelToValidate == 0 && ageToValidate>15){
+            throw new RuntimeException("You should upgrade your certificate!");
+        }else{
+            valid = true;
+        }
+        return valid;
 
     }
 }

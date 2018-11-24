@@ -1,25 +1,25 @@
 public class BreathingDevice {
 
-    private int tanks;
-    private int size; //Volume of tanks in liters
+    private double tanks;
+    private double size; //Volume of tanks in liters
 
-    public int getTanks() {
+    public double getTanks() {
         return tanks;
     }
 
-    public int getSize() {
+    public double getSize() {
         return size;
     }
 
-    public void setTanks(int type) {
-        this.tanks = type;
+    public void setTanks(double tanks) {
+        this.tanks = tanks;
     }
 
-    public void setSize(int size) {
+    public void setSize(double size) {
         this.size = size;
     }
 
-    public BreathingDevice(int tanks, int size){
+    public BreathingDevice(double tanks, double size){
         setTanks(tanks);
         setSize(size);
 

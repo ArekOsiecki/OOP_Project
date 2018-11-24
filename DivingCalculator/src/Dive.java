@@ -56,16 +56,16 @@ public class Dive {
         this.breathingDevice = breathingDevice;
     }
 
-    public Dive(String place, String date, int depth, int length,String name, int age, int sac, int experienceLevel,int tanks, int size){
+    public Dive(String place, String date, int depth, int length,Diver diver,BreathingDevice bd){
         setPlace(place);
         setDate(date);
         setDepth(depth);
         setLength(length);
-        setDiver(new Diver(name,age,sac,experienceLevel));
-        setBreathingDevice(new BreathingDevice(tanks,size));
+        setDiver(diver);
+        setBreathingDevice(bd);
     }
     public Dive(){
-        new Dive("No place entered","No date entered",0,0,"No name entered",0,0,0,0,0);
+        new Dive("No place entered","No date entered",0,0,getDiver(),getBreathingDevice());
 
     }
 

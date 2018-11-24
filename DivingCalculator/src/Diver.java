@@ -43,10 +43,10 @@ public class Diver {
 
 
     public Diver(String name, int age, int sac, int experienceLevel){
-        setName(name);
-        setAge(age);
-        setSac(sac);
-        setExperienceLevel(experienceLevel);
+        this.name = name;
+        this.age = age;
+        this.sac = sac;
+        this.experienceLevel = experienceLevel;
     }
     public Diver(){
         new Diver("No name entered",0,0,0);

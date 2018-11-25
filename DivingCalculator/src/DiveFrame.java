@@ -5,7 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 
-public class DiveFrame implements ActionListener {
+public class DiveFrame extends JFrame implements ActionListener {
+
 
     JFrame diveFrame;
 
@@ -18,14 +19,16 @@ public class DiveFrame implements ActionListener {
     JTextArea logArea,RDPArea; //Text areas
 
 
-    String divePlace, diverName, diveDate;
-    int diverAge;
-    int diverSac;
-    int diverExp;
-    int diveDepth;
-    int diveLength;
+    String divePlace, diveDate;
+    double diveDepth;
+    double diveLength;
     double deviceSize, deviceTanks;
     int deviceFilter;//Attributes for classes
+    BreathingDevice device;
+    String diverName = Diver.getName();
+    int diverAge = Diver.getAge();
+    int diverExp = Diver.getExperienceLevel();
+    double diverSac = Diver.getSac();
 
 
 
@@ -39,6 +42,8 @@ public class DiveFrame implements ActionListener {
 
         public DiveFrame() {
 
+
+            Diver diver = new Diver(diverName,diverAge,diverSac,diverExp);
 
             diveFrame = new JFrame("Create Dive");
             diveFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);//Setting exit method
@@ -113,14 +118,6 @@ public class DiveFrame implements ActionListener {
             diveFrame.setSize(320, 640);
 
 
-            diveDropDown.addActionListener(e->{
-                if(diveDropDown.getSelectedIndex()==1) {
-                    Rebreather device = new Rebreather();
-                }
-                else{
-                    BreathingDevice device = new BreathingDevice();
-                }
-            });
 
 
 
@@ -132,38 +129,42 @@ public class DiveFrame implements ActionListener {
                             while(!valid) {
 
 
-                                validateText(divePlaceText.getText());
+                                DiveDriver.validateText(divePlaceText.getText());
                                 divePlace = divePlaceText.getText();
 
-                                validateText(diveDateText.getText());
+                                DiveDriver.validateText(diveDateText.getText());
                                 diveDate = diveDateText.getText();
 
-                                validateNumber(diveDepthText.getText());
-                                diveDepth = validateDepth(diveDepthText.getText(),diverExp);
+                                DiveDriver.validateNumber(diveDepthText.getText());
+                                diveDepth = DiveDriver.validateDepth(diveDepthText.getText(),diverExp);
 
-                                validateNumber(diveLengthText.getText());
-                                diveLength = Integer.parseInt(diveLengthText.getText());
+                                DiveDriver.validateNumber(diveLengthText.getText());
+                                DiveDriver.validateLength(diveDepthText.getText(),diveLengthText.getText());
+                                diveLength = Double.parseDouble(diveLengthText.getText());
 
-                                if(validateBreathingDevice(diveDropDown.getSelectedIndex(),diverExp) && diveDropDown.getSelectedIndex() == 1){
-                                    JOptionPane.showMessageDialog(null,rebreatherDive(diveDepth,diveLength,deviceFilter));
+                                diveDropDown.addActionListener(e1->{
+                                    if(DiveDriver.validateBreathingDevice(diveDropDown.getSelectedIndex(),diverExp) && diveDropDown.getSelectedIndex() == 1) {
 
-                                }
-                                else{
-                                    validateLength(diveDepthText.getText(), diveLengthText.getText());
-                                    deviceSize = airVolume(diveDepth,diveLength,diverSac);
-                                    deviceTanks = tanksNeeded(deviceSize);
-
-                                }
+                                        JOptionPane.showMessageDialog(null,DiveDriver.rebreatherDive(diveDepth,diveLength,deviceFilter));
+                                        device = new Rebreather(deviceTanks,deviceSize,deviceFilter);
+                                        JOptionPane.showMessageDialog(null, "device created"+device.toString()+" ", "Success", JOptionPane.INFORMATION_MESSAGE);
+                                    }
+                                    else{
+                                        DiveDriver.validateLength(diveDepthText.getText(), diveLengthText.getText());
+                                        deviceSize = DiveDriver.airVolume(diveDepth,diveLength,diverSac);
+                                        deviceTanks = DiveDriver.tanksNeeded(deviceSize);
+                                        device = new BreathingDevice(deviceSize,deviceTanks);
+                                        JOptionPane.showMessageDialog(null, device.toString(), "device created", JOptionPane.INFORMATION_MESSAGE);
+                                    }
+                                });
 
 
 
                                 valid = true;
 
-                                Dive dive;
-                                Diver diver = new Diver(diverName,diverAge,diverSac,diverExp);
-                                BreathingDevice device = new BreathingDevice(deviceTanks,deviceSize);
-                                dive = new Dive(divePlace,diveDate,diveDepth,diveLength,diver,device);
-                                JOptionPane.showMessageDialog(diveFrame, "Profile created"+dive.toString()+" ", "Success", JOptionPane.INFORMATION_MESSAGE);
+                                JOptionPane.showMessageDialog(diveFrame, "Device created"+device.toString()+" ", "Success", JOptionPane.INFORMATION_MESSAGE);
+                                Dive dive = new Dive(divePlace, diveDate, diveDepth, diveLength, diver,device);
+                                JOptionPane.showMessageDialog(diveFrame, "Dive created"+dive.toString()+" ", "Success", JOptionPane.INFORMATION_MESSAGE);
                             }
                         } catch (RuntimeException f) {
                             JOptionPane.showMessageDialog(diveFrame, f.getMessage(), "Incorrect input!", JOptionPane.WARNING_MESSAGE);
@@ -177,172 +178,8 @@ public class DiveFrame implements ActionListener {
 
             });//adding action listeners to buttons using lambda statements
 
-    }
-    public String validateText(String text) throws RuntimeException{ //creating validation methods
-
-        boolean valid = false;
-        String textToValidate = text;
-        for (char c : textToValidate.toCharArray()) {
-            System.out.println("1");
-            if (!Character.isLetter(c)){
-                throw new RuntimeException("You must use only letters to enter name while you used "+textToValidate+"");
-
-            }
-            else{
-                valid = true;
-            }
-        }
-        return textToValidate;
-    }
-    public boolean validateNumber(String number) throws RuntimeException {
-
-        boolean valid = false;
-        String numberToValidate = number;
-        while (!valid) {
-            for (char c : numberToValidate.toCharArray()) {
-                System.out.println("2");
-                if (!Character.isDigit(c)) {
-                    throw new RuntimeException("You must use numbers for input while you used " + numberToValidate + "");
-
-                } else {
-
-                    valid = true;
-                }
-            }
         }
 
-        return valid;
-    }
-    public int validateDepth(String depth,int exp) throws RuntimeException {
-
-        boolean valid = false;
-        int depthToValidate = Integer.parseInt(depth);
-        int validatedDepth;
-
-
-        if (depthToValidate > 40) {
-
-            validatedDepth = 42;
-
-        } else if (depthToValidate < 40 && depthToValidate > 35) {
-
-            validatedDepth = 40;
-
-        } else if (depthToValidate < 35 && depthToValidate > 30) {
-
-            validatedDepth = 35;
-
-        } else if (depthToValidate < 30 && depthToValidate >=25) {
-
-            validatedDepth = 30;
-
-        } else if (depthToValidate < 25 && depthToValidate > 22) {
-
-            validatedDepth = 25;
-
-        } else if (depthToValidate < 22 && depthToValidate > 20) {
-
-            validatedDepth = 22;
-
-        } else if (depthToValidate < 20 && depthToValidate > 18) {
-
-            validatedDepth = 20;
-
-        } else if (depthToValidate < 18 && depthToValidate > 16) {
-
-            validatedDepth = 18;
-
-        } else if (depthToValidate < 16 && depthToValidate > 14) {
-
-            validatedDepth = 16;
-
-        } else if (depthToValidate < 14 && depthToValidate > 12) {
-
-            validatedDepth = 14;
-
-        } else if (depthToValidate < 12 && depthToValidate > 10) {
-
-            validatedDepth = 12;
-
-        } else {
-            validatedDepth = 10;
-        }
-
-        if (validatedDepth > 18 && exp<= 1) {
-            System.out.println("3");
-            throw new RuntimeException("You need to hold Advanced Certificate to dive below 13 meters deep!");
-        } else if (validatedDepth > 30 && exp<= 2) {
-            throw new RuntimeException("You need to be a Divemaster to dive below 30 meters deep!");
-        }
-        if (validatedDepth == 42) {
-            throw new RuntimeException("You should never dive that deep!");
-        } else {
-            return validatedDepth;
-        }
-    }
-    public boolean validateLength(String depth,String length) throws RuntimeException{
-
-        boolean valid;
-        int depthToValidate = Integer.parseInt(depth);
-        int lengthToValidate = Integer.parseInt(length);
-        if(depthToValidate == 42 && lengthToValidate < 7 || depthToValidate <= 40 && lengthToValidate < 8 ||
-                depthToValidate <= 35 && lengthToValidate < 13 || depthToValidate <= 30 && lengthToValidate < 19 ||
-                depthToValidate <= 25 && lengthToValidate < 28 || depthToValidate <= 22 && lengthToValidate < 36 ||
-                depthToValidate <= 20 && lengthToValidate < 45 || depthToValidate == 18 && lengthToValidate < 55 ||
-                depthToValidate == 16 && lengthToValidate < 71 || depthToValidate == 14 && lengthToValidate < 97 ||
-                depthToValidate == 12 && lengthToValidate < 146
-                || depthToValidate == 10 && lengthToValidate < 217  ) {
-            System.out.println("4");
-            throw new RuntimeException("That dive will require decompression! Do not plan recreational dives in this range!");
-        }else{
-            valid = true;
-        }
-
-        return valid;
-    }
-    public boolean validateBreathingDevice(int device, int exp) throws RuntimeException{
-
-        boolean valid;
-
-        if(device == 1 && exp<=1){
-            throw new RuntimeException("You need to hold Advanced Certificate in order to use Rebreather!!");
-
-        }else{
-            valid = true;
-        }
-        return valid;
-
-    }
-
-    public String rebreatherDive (int depth, int length, int filter) throws RuntimeException{
-
-
-        double nitroxCalc = ((depth/10)+1)*1.4;
-        String nitroxTimeDepth;
-
-        if (filter>length){
-
-            throw new RuntimeException("You have entered "+length+" , while your filter have capacity of "+filter+" in minutes!");
-
-        }else {
-            nitroxTimeDepth = "For your planned maximum depth your breathing mixture should contain " + nitroxCalc + "% nitrox" +
-                    "\n You can dive up to 3 hours" +
-                    "\n You can dive again after completing post-dive and pre-dive procedures on surface";
-        }
-        return nitroxTimeDepth;
-    }
-
-    public double airVolume (int depth,int length, int sac) {
-
-        return  (((depth/10)+1)*sac* length);
-
-    }
-
-    public double tanksNeeded (double size){
-
-        return Math.round((((size/14)/10)+5)*10);
-
-    }
 
     public void actionPerformed(ActionEvent actionEvent) {
 

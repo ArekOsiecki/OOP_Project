@@ -2,9 +2,9 @@ public class Dive {
 
     private String place;
     private String date;
-    private int depth;
-    private int length;
-    private Diver diver;
+    private double depth;
+    private double length;
+    private static Diver diver;
     private BreathingDevice breathingDevice;
 
     public String getPlace() {
@@ -15,15 +15,15 @@ public class Dive {
         return date;
     }
 
-    public int getDepth() {
+    public double getDepth() {
         return depth;
     }
 
-    public int getLength() {
+    public double getLength() {
         return length;
     }
 
-    public Diver getDiver() {
+    public static Diver getDiver() {
         return diver;
     }
 
@@ -56,13 +56,14 @@ public class Dive {
         this.breathingDevice = breathingDevice;
     }
 
-    public Dive(String place, String date, int depth, int length,Diver diver,BreathingDevice bd){
-        setPlace(place);
-        setDate(date);
-        setDepth(depth);
-        setLength(length);
-        setDiver(diver);
-        setBreathingDevice(bd);
+    public Dive(String place, String date, double depth, double length,Diver diver,BreathingDevice breathingDevice){
+        this.place = place;
+        this.date = date;
+        this.depth = depth;
+        this.length = length;
+        this.diver = diver;
+        this.breathingDevice = breathingDevice;
+
     }
     public Dive(){
         new Dive("No place entered","No date entered",0,0,getDiver(),getBreathingDevice());

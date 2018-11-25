@@ -1,24 +1,24 @@
 public class Diver {
 
-        private String name;
-        private int age;
-        private int sac; //SAC(Surface air consumption) is a unit of measure used to determine amount of air needed for particular dive in bars per minute
-        private int experienceLevel; //Different experience levels allow for different depths
+        private static String name;
+        private static int age;
+        private static double sac; //SAC(Surface air consumption) is a unit of measure used to determine amount of air needed for particular dive in bars per minute
+        private static int experienceLevel; //Different experience levels allow for different depths
 
 
-    public String getName() {
+    public static String getName() {
         return name;
     }
 
-    public int getAge() {
+    public static int getAge() {
         return age;
     }
 
-    public int getSac() {
+    public static double getSac() {
         return sac;
     }
 
-    public int getExperienceLevel() {
+    public static int getExperienceLevel() {
         return experienceLevel;
     }
 
@@ -32,7 +32,7 @@ public class Diver {
         this.age = age;
     }
 
-    public void setSac(int sac) {
+    public void setSac(double sac) {
         this.sac = sac;
     }
 
@@ -42,7 +42,7 @@ public class Diver {
 
 
 
-    public Diver(String name, int age, int sac, int experienceLevel){
+    public Diver(String name, int age, double sac, int experienceLevel){
         this.name = name;
         this.age = age;
         this.sac = sac;

@@ -75,7 +75,7 @@ public class DivingGUI extends JFrame implements ActionListener{ //This contains
 
             new DiveFrame();
             guiFrame.dispose();
-            
+
         }
         if (actionEvent.getSource() == showDiveLog) {
 

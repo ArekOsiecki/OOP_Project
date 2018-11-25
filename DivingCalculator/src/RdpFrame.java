@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class RdpFrame implements ActionListener {
+public class RdpFrame  extends JFrame implements ActionListener {
 
     JFrame rdpFrame;
 

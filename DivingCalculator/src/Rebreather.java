@@ -24,7 +24,7 @@ public class Rebreather extends BreathingDevice{
     }
 
 
-    public Rebreather(){
+    public Rebreather(double deviceTanks, double deviceSize, int deviceFilter){
         super();
         setFilterUnit(180);
         setClosedCircuit(true);

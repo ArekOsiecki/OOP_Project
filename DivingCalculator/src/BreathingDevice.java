@@ -30,7 +30,7 @@ public class BreathingDevice {
     }
 
     public String toString(){
-        String bdToString = "Number of tanks :" +getTanks()+"\nFull volume "+getSize();
+        String bdToString = "Number of tanks :" +getTanks()+"\nAir volume : "+getSize();
         return bdToString;
 
     }

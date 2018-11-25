@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class LogFrame implements ActionListener {
+public class LogFrame  extends JFrame implements ActionListener {
 
     JFrame logFrame;
 

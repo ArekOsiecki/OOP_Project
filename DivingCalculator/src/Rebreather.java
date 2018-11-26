@@ -1,22 +1,41 @@
 //Device used by experienced divers that requires different calculations of required composition of breathing gas
 
-public class Rebreather extends BreathingDevice{
+import java.io.Serializable;
+
+public class Rebreather extends BreathingDevice implements Serializable {
 
 
-    private boolean isClosedCircuit;
-    private int filterUnitCapacity;
+    private static boolean isClosedCircuit;
+    private static int filterUnitCapacity;
+    private static int tanks;
+    private static int size;
 
-    public boolean isClosedCircuit() {
+    public static boolean isClosedCircuit() {
         return isClosedCircuit;
     }
 
-    public int getFilterUnit() {
+    public static int getFilterUnit() {
         return filterUnitCapacity;
     }
 
+    public static int getTanks() {
+        return tanks;
+    }
+
+    public static int getSize() {
+        return size;
+    }
+
+    public void setTanks(int tanks) {
+        this.tanks = tanks;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
 
     public void setClosedCircuit(boolean closedCircuit) {
-        isClosedCircuit = closedCircuit;
+        this.isClosedCircuit = closedCircuit;
     }
 
     public void setFilterUnit(int filterUnit) {
@@ -24,14 +43,15 @@ public class Rebreather extends BreathingDevice{
     }
 
 
-    public Rebreather(double deviceTanks, double deviceSize, int deviceFilter){
-        super();
-        setFilterUnit(180);
+    public Rebreather(int deviceTanks, int deviceSize, int filterUnitCapacity, boolean isClosedCircuit){
+        super(deviceTanks,deviceSize);
         setClosedCircuit(true);
+        this.filterUnitCapacity = filterUnitCapacity;
 
     }
+
     public String toString(){
-        String rebreatherToString = "Tanks: "+getTanks()+"\nVolume of tanks: "+getSize()+"\nFilter capacity: "+getFilterUnit()+" minutes";
+        String rebreatherToString = "\nTanks: "+getTanks()+"\nVolume of tanks: "+getSize()+"\nFilter capacity: "+getFilterUnit()+" minutes";
         return rebreatherToString;
     }
 }

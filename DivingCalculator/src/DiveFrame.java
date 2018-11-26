@@ -3,6 +3,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.*;
 
 
 public class DiveFrame extends JFrame implements ActionListener {
@@ -13,39 +14,36 @@ public class DiveFrame extends JFrame implements ActionListener {
     JMenuBar guiMenuBar = new JMenuBar();
     JMenu diveMenu = new JMenu("Dive Menu");
     JMenuItem createProfile = new JMenuItem("Create Profile");
-    JMenuItem planDive = new JMenuItem("Plan dive");
     JMenuItem showDiveLog = new JMenuItem("Show dive log");
-    JMenuItem planAnotherDive = new JMenuItem("Show RDP Table");//declaration of menu, menu bar and items
-    JTextArea logArea,RDPArea; //Text areas
+    JMenuItem planAnotherDive = new JMenuItem("Plan another dive");//declaration of menu, menu bar and items
+
+
 
 
     String divePlace, diveDate;
-    double diveDepth;
-    double diveLength;
-    double deviceSize, deviceTanks;
-    int deviceFilter;//Attributes for classes
-    BreathingDevice device;
+    int diveDepth;
+    int diveLength;
+    int deviceSize ;
+    int deviceFilter ;
     String diverName = Diver.getName();
     int diverAge = Diver.getAge();
     int diverExp = Diver.getExperienceLevel();
-    double diverSac = Diver.getSac();
+    int diverSac = Diver.getSac();
+    int pressureGroup = Diver.getPressureGroup();
 
 
 
 
-
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
             new DiveFrame();
 
+
     }
 
-        public DiveFrame() {
+        public DiveFrame() throws IOException {
 
-
-            Diver diver = new Diver(diverName,diverAge,diverSac,diverExp);
-
-            diveFrame = new JFrame("Create Dive");
+            diveFrame = new JFrame("Plan second dive");
             diveFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);//Setting exit method
 
             diveMenu.add(createProfile);
@@ -58,12 +56,8 @@ public class DiveFrame extends JFrame implements ActionListener {
             showDiveLog.addActionListener(this);
 
             guiMenuBar.add(diveMenu);
-            diveFrame.setJMenuBar(guiMenuBar);
+            //adding menus to bar
 
-            diveFrame.setSize(320,640);
-            diveFrame.setLocationRelativeTo(null);
-            diveFrame.setVisible(true);
-            diveFrame.setFocusable(true);//adding menu bar to frame, setting visibility and size
 
 
             GridLayout diveFrameLayout = new GridLayout(0, 1);
@@ -85,7 +79,7 @@ public class DiveFrame extends JFrame implements ActionListener {
             JTextField diveLengthText = new JTextField(20);
             diveLengthText.setBorder(BorderFactory.createTitledBorder("Enter planned length in minutes"));
 
-            String[] choices = {"Regulator and cylinders ","Rebreather (semi - closed circut)"}; //Creating drop down list, setting it to be uneditable by user and retrieving input
+            String[] choices = {"Regulator and cylinders ", "Rebreather (semi - closed circut)"}; //Creating drop down list, setting it to be uneditable by user and retrieving input
             final JComboBox<String> diveDropDown = new JComboBox<>(choices);
             diveDropDown.setBorder(BorderFactory.createTitledBorder("Choose your device"));
             diveDropDown.setVisible(true);
@@ -111,63 +105,87 @@ public class DiveFrame extends JFrame implements ActionListener {
             //adding components to layout
 
 
-
             //adding menu bar to frame, setting visibility and size
+            diveFrame.setSize(400, 640);
             diveFrame.setLocationRelativeTo(null);
             diveFrame.setVisible(true);
-            diveFrame.setSize(320, 640);
+            diveFrame.setFocusable(true);
 
 
-
+            File outFile = new File("objects.data");
+            FileOutputStream  outFileStream = new FileOutputStream(outFile);
+            ObjectOutputStream outObjectStream = new ObjectOutputStream(outFileStream);
 
 
             confirmButton.addActionListener(e -> {
                         boolean valid = false;
 
 
+
+
                         try {
                             while(!valid) {
 
 
-                                DiveDriver.validateText(divePlaceText.getText());
-                                divePlace = divePlaceText.getText();
+                                Diver diver = new Diver(diverName,diverAge,diverSac,diverExp,pressureGroup);
 
-                                DiveDriver.validateText(diveDateText.getText());
-                                diveDate = diveDateText.getText();
 
-                                DiveDriver.validateNumber(diveDepthText.getText());
-                                diveDepth = DiveDriver.validateDepth(diveDepthText.getText(),diverExp);
+                                    DiveDriver.validateText(divePlaceText.getText());
+                                    divePlace = divePlaceText.getText();
 
-                                DiveDriver.validateNumber(diveLengthText.getText());
-                                DiveDriver.validateLength(diveDepthText.getText(),diveLengthText.getText());
-                                diveLength = Double.parseDouble(diveLengthText.getText());
+                                    DiveDriver.validateText(diveDateText.getText());
+                                    diveDate = diveDateText.getText();
 
-                                diveDropDown.addActionListener(e1->{
-                                    if(DiveDriver.validateBreathingDevice(diveDropDown.getSelectedIndex(),diverExp) && diveDropDown.getSelectedIndex() == 1) {
+                                    DiveDriver.validateBreathingDevice(diveDropDown.getSelectedIndex(),diverExp);
+                                    if(diveDropDown.getSelectedIndex()==1){
 
-                                        JOptionPane.showMessageDialog(null,DiveDriver.rebreatherDive(diveDepth,diveLength,deviceFilter));
-                                        device = new Rebreather(deviceTanks,deviceSize,deviceFilter);
-                                        JOptionPane.showMessageDialog(null, "device created"+device.toString()+" ", "Success", JOptionPane.INFORMATION_MESSAGE);
+                                        DiveDriver.validateNumber(diveDepthText.getText());
+                                        diveDepth = Integer.parseInt(diveDepthText.getText());
+
+                                        DiveDriver.validateNumber(diveLengthText.getText());
+                                        diveLength = Integer.parseInt(diveLengthText.getText());
+
+                                        deviceFilter = 180;
+
+
+                                        valid = true;
+
+
+                                        Rebreather device = new Rebreather(2,8,180,true);
+
+
+                                        JOptionPane.showMessageDialog(diveFrame, "Device " +device.toString()+" ", "Device", JOptionPane.INFORMATION_MESSAGE);
+                                        Dive dive = new Dive(divePlace, diveDate, diveDepth, diveLength, diver,device);
+                                        JOptionPane.showMessageDialog(diveFrame, "Dive Logged", "Success", JOptionPane.INFORMATION_MESSAGE);
+                                        JOptionPane.showMessageDialog(diveFrame,DiveDriver.rebreatherDive(diveDepth,diveLength,deviceFilter));
+                                        outObjectStream.writeObject(dive);
+
+
+                                    }else{
+
+                                        DiveDriver.validateNumber(diveDepthText.getText());
+                                        diveDepth = Integer.parseInt(diveDepthText.getText());
+                                        DiveDriver.validateDepthAndExperience(diveDepth,diverExp);
+
+                                        DiveDriver.validateNumber(diveLengthText.getText());
+                                        diveLength = DiveDriver.validateDiveLength(diveDepth,diveLengthText.getText());
+
+                                        valid = true;
+
+                                        BreathingDevice device = new BreathingDevice(DiveDriver.tanksNeeded(deviceSize),DiveDriver.airVolume(diveDepth,diveLength,diverSac));
+
+                                        JOptionPane.showMessageDialog(diveFrame, "Device " +device.toString()+" ", "Device", JOptionPane.INFORMATION_MESSAGE);
+                                        Dive dive = new Dive(divePlace, diveDate, diveDepth, diveLength, diver,device);
+                                        JOptionPane.showMessageDialog(diveFrame, "Dive Logged", "Success", JOptionPane.INFORMATION_MESSAGE);
+                                        outObjectStream.writeObject(dive);
+
+
+
                                     }
-                                    else{
-                                        DiveDriver.validateLength(diveDepthText.getText(), diveLengthText.getText());
-                                        deviceSize = DiveDriver.airVolume(diveDepth,diveLength,diverSac);
-                                        deviceTanks = DiveDriver.tanksNeeded(deviceSize);
-                                        device = new BreathingDevice(deviceSize,deviceTanks);
-                                        JOptionPane.showMessageDialog(null, device.toString(), "device created", JOptionPane.INFORMATION_MESSAGE);
-                                    }
-                                });
 
-
-
-                                valid = true;
-
-                                JOptionPane.showMessageDialog(diveFrame, "Device created"+device.toString()+" ", "Success", JOptionPane.INFORMATION_MESSAGE);
-                                Dive dive = new Dive(divePlace, diveDate, diveDepth, diveLength, diver,device);
-                                JOptionPane.showMessageDialog(diveFrame, "Dive created"+dive.toString()+" ", "Success", JOptionPane.INFORMATION_MESSAGE);
                             }
-                        } catch (RuntimeException f) {
-                            JOptionPane.showMessageDialog(diveFrame, f.getMessage(), "Incorrect input!", JOptionPane.WARNING_MESSAGE);
+                        } catch (RuntimeException | IOException f) {
+                            JOptionPane.showMessageDialog(diveFrame, f.fillInStackTrace(), "Incorrect input!", JOptionPane.WARNING_MESSAGE);
                         }
                     }
             );
@@ -178,6 +196,7 @@ public class DiveFrame extends JFrame implements ActionListener {
 
             });//adding action listeners to buttons using lambda statements
 
+
         }
 
 
@@ -186,17 +205,24 @@ public class DiveFrame extends JFrame implements ActionListener {
 
         if(actionEvent.getSource()==createProfile){
 
-            new ProfileFrame();
+            try {
+                new ProfileFrame();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             diveFrame.dispose();
-
-
-
 
         }
 
         if (actionEvent.getSource() == showDiveLog) {
 
-            new LogFrame();
+            try {
+                new LogFrame();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
             diveFrame.dispose();
 
         }

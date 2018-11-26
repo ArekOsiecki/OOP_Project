@@ -3,6 +3,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public class RdpFrame  extends JFrame implements ActionListener {
 
@@ -13,7 +14,7 @@ public class RdpFrame  extends JFrame implements ActionListener {
     JMenuItem createProfile = new JMenuItem("Create Profile");
     JMenuItem planDive = new JMenuItem("Plan dive");
     JMenuItem showDiveLog = new JMenuItem("Show dive log");
-    JMenuItem planAnotherDive = new JMenuItem("Plan Another Dive");//declaration of menu, menu bar and items
+    //declaration of menu, menu bar and items
     JTextArea logArea, RDPArea; //Text areas
 
 
@@ -41,12 +42,7 @@ public class RdpFrame  extends JFrame implements ActionListener {
         guiMenuBar.add(diveMenu);
       //adding menus to bar
 
-        rdpFrame.setJMenuBar(guiMenuBar);
 
-        rdpFrame.setSize(320, 640);
-        rdpFrame.setLocationRelativeTo(null);
-        rdpFrame.setVisible(true);
-        rdpFrame.setFocusable(true);//adding menu bar to frame, setting visibility and size
 
         GridLayout diveFrameLayout = new GridLayout(0, 1);
         rdpFrame.setLayout(diveFrameLayout);
@@ -94,9 +90,10 @@ public class RdpFrame  extends JFrame implements ActionListener {
 
 
         //adding menu bar to frame, setting visibility and size
+        rdpFrame.setSize(400, 640);
         rdpFrame.setLocationRelativeTo(null);
         rdpFrame.setVisible(true);
-        rdpFrame.setSize(320, 640);
+        rdpFrame.setFocusable(true);
 
 
     }
@@ -106,7 +103,11 @@ public class RdpFrame  extends JFrame implements ActionListener {
 
         if (actionEvent.getSource() == createProfile) {
 
-            new ProfileFrame();
+            try {
+                new ProfileFrame();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             rdpFrame.dispose();
 
 
@@ -114,7 +115,11 @@ public class RdpFrame  extends JFrame implements ActionListener {
 
         if (actionEvent.getSource() == planDive) {
 
-            new DiveFrame();
+            try {
+                new DiveFrame();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             rdpFrame.dispose();
 
 
@@ -122,7 +127,13 @@ public class RdpFrame  extends JFrame implements ActionListener {
         }
         if (actionEvent.getSource() == showDiveLog) {
 
-            new LogFrame();
+            try {
+                new LogFrame();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
             rdpFrame.dispose();
 
 

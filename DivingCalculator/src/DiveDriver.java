@@ -1,7 +1,3 @@
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 public class DiveDriver{
 
 
@@ -16,7 +12,7 @@ public class DiveDriver{
 
         String textToValidate = text;
         for (char c : textToValidate.toCharArray()) {
-            System.out.println("1");
+
             if (!Character.isLetter(c)){
                 throw new RuntimeException("You must use only letters to enter name while you used "+textToValidate+"");
 
@@ -27,12 +23,13 @@ public class DiveDriver{
     }
     public static boolean validateNumber(String number) throws RuntimeException {
 
+
         boolean valid = false;
         String numberToValidate = number;
 
         while (!valid) {
             for (char c : numberToValidate.toCharArray()) {
-                System.out.println("2");
+
                 if (!Character.isDigit(c)) {
                     throw new RuntimeException("You must use numbers for input while you used " + numberToValidate + "");
 
@@ -50,7 +47,7 @@ public class DiveDriver{
         boolean valid;
         int ageRangeToValidate = Integer.parseInt(diverAgeText);
         if(ageRangeToValidate < 10 || ageRangeToValidate > 85) {
-            System.out.println("3");
+
             throw new RuntimeException("Age is " + ageRangeToValidate +" and should be more than 6 and less than 85");
         }else{
             valid = true;
@@ -64,7 +61,7 @@ public class DiveDriver{
         int sacRangeToValidate = Integer.parseInt(diverSacText);
 
         if(sacRangeToValidate < 10 || sacRangeToValidate > 25) {
-            System.out.println("4");
+
             throw new RuntimeException("SAC is " + sacRangeToValidate+ " and should be more than 10 and less than 25");
         }else{
             valid = true;
@@ -72,7 +69,7 @@ public class DiveDriver{
 
         return valid;
     }
-    public static boolean validateExperience(int level, double age) throws RuntimeException{
+    public static boolean validateExperience(int level, int age) throws RuntimeException{
         boolean valid;
 
         if(level == 3 && age<18){
@@ -90,98 +87,112 @@ public class DiveDriver{
 
     }
 
-    public static double validateDepth(String depth,int exp) throws RuntimeException {
+    public static int validateDepth(String depth) throws RuntimeException {
 
 
-        double depthToValidate = Double.parseDouble(depth);
-        double validatedDepth;
+        int depthToValidate = Integer.parseInt(depth);
+        int validatedDepth;
 
 
         if (depthToValidate > 40) {
 
             validatedDepth = 42;
 
-        } else if (depthToValidate < 40 && depthToValidate > 34) {
+        } else if ( depthToValidate <= 40 && depthToValidate > 35 ) {
 
             validatedDepth = 40;
 
-        } else if (depthToValidate < 35 && depthToValidate > 29) {
+        } else if (depthToValidate <= 35 && depthToValidate > 30 ) {
 
             validatedDepth = 35;
 
-        } else if (depthToValidate < 30 && depthToValidate >24) {
+        } else if (depthToValidate <= 30 && depthToValidate > 25 ) {
 
             validatedDepth = 30;
 
-        } else if (depthToValidate < 25 && depthToValidate > 21) {
+        } else if (depthToValidate <= 25 && depthToValidate > 22)  {
 
             validatedDepth = 25;
 
-        } else if (depthToValidate < 22 && depthToValidate > 19) {
+        } else if (depthToValidate <= 22 && depthToValidate > 20) {
 
             validatedDepth = 22;
 
-        } else if (depthToValidate < 20 && depthToValidate > 17) {
+        } else if (depthToValidate <= 20 && depthToValidate > 18) {
 
             validatedDepth = 20;
 
-        } else if (depthToValidate < 18 && depthToValidate > 15) {
+        } else if (depthToValidate <= 18 && depthToValidate > 16) {
 
             validatedDepth = 18;
 
-        } else if (depthToValidate < 16 && depthToValidate > 13) {
+        } else if (depthToValidate <= 16 && depthToValidate > 14) {
 
             validatedDepth = 16;
 
-        } else if (depthToValidate < 14 && depthToValidate > 11) {
+        } else if (depthToValidate <= 14 && depthToValidate > 12) {
 
             validatedDepth = 14;
 
-        } else if (depthToValidate < 12 && depthToValidate > 9) {
+        } else if (depthToValidate <= 12 && depthToValidate > 10) {
 
             validatedDepth = 12;
 
         } else {
+
             validatedDepth = 10;
         }
-        System.out.println(validatedDepth);
 
-        if (validatedDepth > 13 && exp<= 1) {
-            throw new RuntimeException("You need to hold Advanced Certificate to dive below 13 meters deep!");
-        } else if (validatedDepth > 30 && exp <= 2) {
-            throw new RuntimeException("You need to be a Divemaster to dive below 30 meters deep!");
-        }else if (validatedDepth == 42) {
-            throw new RuntimeException("You should never dive that deep!");
-        } else {
             return validatedDepth;
         }
-    }
-    public static boolean validateLength(String depth,String length) throws RuntimeException{
+
+
+    public static boolean validateDepthAndExperience(int depth, int exp)  throws RuntimeException{
 
         boolean valid;
-        int depthToValidate = Integer.parseInt(depth);
-        int lengthToValidate = Integer.parseInt(length);
-        if(depthToValidate == 42 && lengthToValidate > 7 || depthToValidate == 40 && lengthToValidate > 8 ||
-                depthToValidate == 35 && lengthToValidate > 13 || depthToValidate == 30 && lengthToValidate > 19 ||
-                depthToValidate == 25 && lengthToValidate > 28 || depthToValidate == 22 && lengthToValidate > 36 ||
-                depthToValidate == 20 && lengthToValidate > 45 || depthToValidate == 18 && lengthToValidate > 55 ||
-                depthToValidate == 16 && lengthToValidate > 71 || depthToValidate == 14 && lengthToValidate > 97 ||
-                depthToValidate == 12 && lengthToValidate > 146
-                || depthToValidate == 10 && lengthToValidate > 217  ) {
-            System.out.println("4");
-            throw new RuntimeException("That dive will require decompression! Do not plan recreational dives in this range!");
+
+        if (depth > 13 && exp<= 1) {
+            throw new RuntimeException("You need to hold Advanced Certificate to dive below 13 meters deep!");
+        } else if (depth > 30 && exp <= 2) {
+            throw new RuntimeException("You need to be a Divemaster to dive below 30 meters deep!");
+        }else if (depth == 42){
+            throw new RuntimeException("You should never dive that deep!");
         }else{
             valid = true;
         }
 
         return valid;
+
+
+    }
+    public static int validateDiveLength(int depth,String lengthString) throws RuntimeException {
+
+        int length = Integer.parseInt(lengthString);
+        int validatedLength;
+
+
+        if((length >= 7 && depth == 40)||(length >= 14 && depth == 35)||(length >= 20 && depth == 30)
+                ||(length >= 29 && depth == 25)||(length >= 37 && depth == 22)||(length >= 45 && depth == 20)
+                ||(length >= 56 && depth == 21)||(length >= 71 && depth == 16)||(length >= 98 && depth == 14)
+                ||(length >= 147 && depth == 12)||(length >= 219 && depth == 10)){
+
+
+            throw new RuntimeException("That dive is in no decompression limit! Do not plan recreational dives in this range!");
+        }else{
+
+            validatedLength = length;
+
+        }
+
+        return validatedLength;
+
     }
     public  static boolean validateBreathingDevice(int device, int exp) throws RuntimeException{
 
         boolean valid;
 
-        if(device == 1 && exp<=1){
-            throw new RuntimeException("You need to hold Advanced Certificate in order to use Rebreather!!");
+        if((device == 1) && (exp < 2)){
+            throw new RuntimeException("You need to hold at least Advanced Certificate in order to use Rebreather!");
 
         }else{
             valid = true;
@@ -190,43 +201,68 @@ public class DiveDriver{
 
     }
 
-    public static String rebreatherDive (double depth, double length, int filter) throws RuntimeException{
+    public static String rebreatherDive (int depth, int length, int filter) throws RuntimeException{
 
 
         double nitroxCalc = ((((depth)/10)+1)*1.4)*10;
         String nitroxTimeDepth;
 
-        if (filter>length){
+        if (filter<length){
 
-            throw new RuntimeException("You have entered "+length+" , while your filter have capacity of "+filter+" in minutes!");
+            throw new RuntimeException("You have entered "+length+" , while your filter have capacity of "+filter+" minutes!");
 
         }else {
-            nitroxTimeDepth = String.format("For your planned maximum depth your breathing mixture should contain " + nitroxCalc + "% nitrox" +
-                    "\n You can dive up to 3 hours" +
-                    "\n You can dive again after completing post-dive and pre-dive procedures on surface","%.2d");
+            nitroxTimeDepth = "For your planned maximum depth your breathing mixture should contain " + nitroxCalc + "% nitrox" +
+                    "\nYou can dive up to 3 hours" +
+                    "\nYou can dive again after completing post-dive and pre-dive procedures on surface";
         }
         return nitroxTimeDepth;
     }
 
-    public  static double airVolume (double depth,double length, double sac) {
+    public  static int airVolume (int depth,int length, int sac) {
 
 
+        double depthC = (double)depth;
+        double lengthC = (double)length;
+        double sacC = (double)sac;
+        double airUsed;
+        double depthMultiplier;
+        double airNeeded;
+        int volume;
 
-        double air = (depth/10)+1;
-        double volume = sac*length;
-        return air*volume;
+        airUsed = sacC*lengthC;
+
+        depthMultiplier = (depthC/10)+1;
+
+        airNeeded = airUsed*depthMultiplier;
+        volume = (int)airNeeded;
+
+        return volume;
+
+
 
 
     }
 
-    public static double tanksNeeded (double size){
+    public static int tanksNeeded (int size){
 
-        double tankSize = 14;
-        double firstPart = size/tankSize;
-        double secondPart = (firstPart/10)+5;
-        return Math.round(secondPart*10);
+
+        double sizeC = (double)size;
+        double tank =14;
+        double bars = sizeC/tank;
+        double tanks = bars/230;
+
+        double roundedTanks = Math.round(tanks)+1;
+
+
+
+        return (int)roundedTanks;
+
 
     }
+
+
+
 
 
 }

@@ -8,6 +8,7 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 
 public class DivingGUI extends JFrame implements ActionListener{ //This contains global references, buttons and text fields creation code
@@ -46,7 +47,7 @@ public class DivingGUI extends JFrame implements ActionListener{ //This contains
         guiMenuBar.add(diveMenu);
         guiFrame.setJMenuBar(guiMenuBar);
 
-        guiFrame.setSize(320,640);
+        guiFrame.setSize(400,640);
         guiFrame.setLocationRelativeTo(null);
         guiFrame.setVisible(true);
         guiFrame.setFocusable(true);//adding menu bar to frame, setting visibility and size
@@ -66,20 +67,34 @@ public class DivingGUI extends JFrame implements ActionListener{ //This contains
 
         if(actionEvent.getSource()==createProfile){
 
-             new ProfileFrame();
+            try {
+                new ProfileFrame();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             guiFrame.dispose();
 
         }
 
         if(actionEvent.getSource()==planDive){
 
-            new DiveFrame();
+            try {
+                new DiveFrame();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             guiFrame.dispose();
 
         }
         if (actionEvent.getSource() == showDiveLog) {
 
-            new LogFrame();
+            try {
+                new LogFrame();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
             guiFrame.dispose();
 
         }

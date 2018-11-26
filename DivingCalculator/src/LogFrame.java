@@ -3,8 +3,11 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.*;
 
 public class LogFrame  extends JFrame implements ActionListener {
+
+
 
     JFrame logFrame;
 
@@ -12,21 +15,34 @@ public class LogFrame  extends JFrame implements ActionListener {
     JMenu diveMenu = new JMenu("Dive Menu");
     JMenuItem createProfile = new JMenuItem("Create Profile");
     JMenuItem planDive = new JMenuItem("Plan dive");
-    JMenuItem showDiveLog = new JMenuItem("Show dive log");
-    JMenuItem planAnotherDive = new JMenuItem("Plan Another Dive");//declaration of menu, menu bar and items
+    JMenuItem planAnotherDive = new JMenuItem("Plan another dive");//declaration of menu, menu bar and items
+
+    String divePlace;
+    String diveDate;
+    int diveDepth;
+    int diveLength;
+    int deviceSize ;
+    int deviceFilter ;
+    String diverName = Diver.getName();
+    int diverAge = Diver.getAge();
+    int diverExp = Diver.getExperienceLevel();
+    int diverSac = Diver.getSac();
+    int pressureGroup = Diver.getPressureGroup();
     JTextArea logArea, RDPArea; //Text areas
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
 
         new LogFrame();
 
+
+
     }
 
-    public LogFrame() {
+    public LogFrame() throws IOException, ClassNotFoundException {
 
 
-        logFrame = new JFrame("Show dive log");
+        logFrame = new JFrame("Show Log");
         logFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);//Setting exit method
 
         diveMenu.add(createProfile);
@@ -35,78 +51,100 @@ public class LogFrame  extends JFrame implements ActionListener {
         diveMenu.add(planDive);
         planDive.addActionListener(this);
 
+
         diveMenu.add(planAnotherDive);
         planAnotherDive.addActionListener(this);
 
-
         guiMenuBar.add(diveMenu);
-
         logFrame.setJMenuBar(guiMenuBar);
 
-        logFrame.setSize(320, 640);
+        logFrame.setSize(400,640);
         logFrame.setLocationRelativeTo(null);
         logFrame.setVisible(true);
         logFrame.setFocusable(true);//adding menu bar to frame, setting visibility and size
 
-
-
-        GridLayout diveFrameLayout = new GridLayout(0, 1);
+        BorderLayout diveFrameLayout = new BorderLayout(0, 1);
         logFrame.setLayout(diveFrameLayout);
         logFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         JMenu diveGridMenu = new JMenu("Dive Menu");
         diveGridMenu.setVisible(true);
 
-        JTextField divePlaceText = new JTextField(20);//Creating fields for user input and corresponding labels
-        divePlaceText.setBorder(BorderFactory.createTitledBorder("Where you plan to dive?"));
+        JTextArea TextArea = new JTextArea(200,150);
+        TextArea.setPreferredSize(new Dimension(200, 150));
+        logFrame.add(TextArea,BorderLayout.CENTER);
+        JButton confirmButton = new JButton("OK");
 
-        JTextField diveDateText = new JTextField(20);
-        diveDateText.setBorder(BorderFactory.createTitledBorder("When you plan to dive?"));
-
-        JTextField diveDepthText = new JTextField(20);
-        diveDepthText.setBorder(BorderFactory.createTitledBorder("Enter maximum planned depth in meters"));
-
-        JTextField diveLengthText = new JTextField(20);
-        diveLengthText.setBorder(BorderFactory.createTitledBorder("Enter planned length in minutes"));
-
-        String[] choices = {"Regulator and cylinders ", "Rebreather (semi - closed circut)"}; //Creating drop down list, setting it to be uneditable by user and retrieving input
-        final JComboBox<String> diveDropDown = new JComboBox<>(choices);
-        diveDropDown.setBorder(BorderFactory.createTitledBorder("Choose your device"));
-        diveDropDown.setVisible(true);
-        diveDropDown.setEditable(false);
+        logFrame.add(confirmButton,BorderLayout.PAGE_END);
 
 
-        JPanel buttonsPanel = new JPanel();
-        buttonsPanel.setBorder(new EmptyBorder(15, 15, 15, 15));
-        GridLayout buttonsLayout = new GridLayout(0, 2, 25, 0);
-        buttonsPanel.setLayout(buttonsLayout);
 
-        JButton confirmButton = new JButton("Confirm");
-        JButton cancelButton = new JButton("Cancel");
-        logFrame.setJMenuBar(guiMenuBar);
-        buttonsPanel.add(confirmButton);
-        buttonsPanel.add(cancelButton);
-        logFrame.add(divePlaceText);
-        logFrame.add(diveDateText);
-        logFrame.add(diveDepthText);
-        logFrame.add(diveLengthText);
-        logFrame.add(diveDropDown);
-        logFrame.add(buttonsPanel);
-        //adding components to layout
+        File inFile = new File("objects.data");
+
+        FileInputStream inFileStream = new FileInputStream(inFile);
+        ObjectInputStream inObjectStream = new ObjectInputStream(inFileStream);
+
+        Dive dive = (Dive) inObjectStream.readObject();
+
+        Diver diver = dive.getDiver();
 
 
-        //adding menu bar to frame, setting visibility and size
-        logFrame.setLocationRelativeTo(null);
-        logFrame.setVisible(true);
-        logFrame.setSize(320, 640);
+
+
+
+        Font font = new Font("Monospaced",Font.PLAIN,10);
+
+        String text = "";
+        text = String.format("\n%15s%15s%15s%15s%15s%15s", "Name", "Place", "Date","Depth","Length","Device");
+
+        TextArea.append(text);
+
+
+        String name = diver.getName();
+        String place = dive.getPlace();
+        String date = dive.getPlace();
+        String depth = Integer.toString(dive.getDepth());
+        String length = Integer.toString(dive.getLength());
+        String device;
+        BreathingDevice bd =dive.getBreathingDevice();
+
+        if(bd.getSize()>8){
+            device = "Rebreather";
+        }else{
+            device = "Regulator";
+        }
+
+        text = String.format("\n%10s%10s%10s%10s%10s%10s", name, place, date,depth,length,device);
+        TextArea.append(text);
+
+
+
+
+
+
+        confirmButton.addActionListener(e -> {
+
+
+            logFrame.setVisible(false);//disposing of current frame
+
+        });//adding action listeners to buttons using lambda statements
+
     }
+
+
+
+
 
     public void actionPerformed(ActionEvent actionEvent) {
 
 
         if (actionEvent.getSource() == createProfile) {
 
-            new ProfileFrame();
+            try {
+                new ProfileFrame();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             logFrame.dispose();
 
 
@@ -114,7 +152,11 @@ public class LogFrame  extends JFrame implements ActionListener {
 
         if (actionEvent.getSource() == planDive) {
 
-            new DiveFrame();
+            try {
+                new DiveFrame();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             logFrame.dispose();
         }
 

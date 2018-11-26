@@ -5,7 +5,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.io.*;
 
 
 public class ProfileFrame extends JFrame implements ActionListener {
@@ -14,26 +14,27 @@ public class ProfileFrame extends JFrame implements ActionListener {
     JFrame profileFrame;
     JMenuBar guiMenuBar = new JMenuBar();
     JMenu diveMenu = new JMenu("Dive Menu");
-    JMenuItem createProfile = new JMenuItem("Create Profile");
     JMenuItem planDive = new JMenuItem("Plan dive");
     JMenuItem showDiveLog = new JMenuItem("Show dive log");
-    JMenuItem planAnotherDive = new JMenuItem("Show RDP Table");//declaration of menu, menu bar and items
+    JMenuItem planAnotherDive = new JMenuItem("Plan another dive");//declaration of menu, menu bar and items
     JTextArea logArea,RDPArea; //Text areas
 
     String diverName;
     int diverAge, diverSac, diverExp; //Attributes for class
     Diver diver;
+    BreathingDevice device;
 
 
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+
         new ProfileFrame();
 
     }
 
 
-    ProfileFrame() {
+    ProfileFrame() throws IOException {
 
             profileFrame = new JFrame("Create Profile");
             profileFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);//Setting exit method
@@ -53,12 +54,7 @@ public class ProfileFrame extends JFrame implements ActionListener {
             guiMenuBar.add(diveMenu);
             //adding menus to bar
 
-        profileFrame.setJMenuBar(guiMenuBar);
 
-        profileFrame.setSize(320,640);
-        profileFrame.setLocationRelativeTo(null);
-        profileFrame.setVisible(true);
-        profileFrame.setFocusable(true);//adding menu bar to frame, setting visibility and size
 
         GridLayout profileFrameLayout = new GridLayout(0, 1);
         profileFrame.setLayout(profileFrameLayout);
@@ -83,6 +79,8 @@ public class ProfileFrame extends JFrame implements ActionListener {
         profileDropDown.setVisible(true);
         profileDropDown.setEditable(false);
 
+
+
         JPanel buttonsPanel = new JPanel();
         buttonsPanel.setBorder(new EmptyBorder(15, 15, 15, 15));
         GridLayout buttonsLayout = new GridLayout(0, 2, 25, 0);
@@ -99,10 +97,16 @@ public class ProfileFrame extends JFrame implements ActionListener {
         profileFrame.add(profileDropDown);
         profileFrame.add(buttonsPanel);
 
-        //adding menu bar to frame, setting visibility and size
+        profileFrame.setJMenuBar(guiMenuBar);
+
+        profileFrame.setSize(400,640);
         profileFrame.setLocationRelativeTo(null);
         profileFrame.setVisible(true);
-        profileFrame.setSize(320, 640);
+        profileFrame.setFocusable(true);//adding menu bar to frame, setting visibility and size
+
+        File outFile = new File("objects.data");
+        FileOutputStream outFileStream = new FileOutputStream(outFile);
+        ObjectOutputStream outObjectStream = new ObjectOutputStream(outFileStream);
 
 
         confirmButton.addActionListener(e -> {  //adding action listeners to buttons using lambda statements
@@ -120,21 +124,24 @@ public class ProfileFrame extends JFrame implements ActionListener {
                         DiveDriver.validateSacRange(sacText.getText());
                         DiveDriver.validateExperience(profileDropDown.getSelectedIndex(),Integer.parseInt(ageText.getText()));
 
-                            diverName = nameText.getText();
-                            diverAge = Integer.parseInt(ageText.getText());
-                            diverSac = Integer.parseInt(sacText.getText());
-                            diverExp = profileDropDown.getSelectedIndex();
+                        diverName = nameText.getText();
+                        diverAge = Integer.parseInt(ageText.getText());
+                        diverSac = Integer.parseInt(sacText.getText());
+                        diverExp = profileDropDown.getSelectedIndex();
+
 
                         valid = true;
 
+                        diver = new Diver(diverName,diverAge,diverSac,diverExp,0);
 
-                        diver = new Diver(diverName,diverAge,diverSac,diverExp);
+
 
                         JOptionPane.showMessageDialog(null, "Profile created"+diver.toString()+" ", "Success", JOptionPane.INFORMATION_MESSAGE);
 
+
                     }
                 } catch (RuntimeException f) {
-                    JOptionPane.showMessageDialog(profileFrame, f.getMessage(), "Incorrect input!", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(profileFrame, f.getStackTrace(), "Incorrect input!", JOptionPane.WARNING_MESSAGE);
                 }
             }
 
@@ -156,14 +163,24 @@ public class ProfileFrame extends JFrame implements ActionListener {
 
         if(actionEvent.getSource()==planDive){
 
-            new DiveFrame();
+            try {
+                new DiveFrame();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             profileFrame.dispose();
 
 
         }
         if (actionEvent.getSource() == showDiveLog) {
 
-            new LogFrame();
+            try {
+                new LogFrame();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
             profileFrame.dispose();
 
         }

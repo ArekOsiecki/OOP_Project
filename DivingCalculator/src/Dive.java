@@ -1,11 +1,13 @@
-public class Dive {
+import java.io.Serializable;
+
+public class Dive implements Serializable {
 
     private String place;
     private String date;
-    private double depth;
-    private double length;
+    private int depth;
+    private int length;
     private static Diver diver;
-    private BreathingDevice breathingDevice;
+    private static BreathingDevice breathingDevice;
 
     public String getPlace() {
         return place;
@@ -15,11 +17,11 @@ public class Dive {
         return date;
     }
 
-    public double getDepth() {
+    public int getDepth() {
         return depth;
     }
 
-    public double getLength() {
+    public int getLength() {
         return length;
     }
 
@@ -27,7 +29,7 @@ public class Dive {
         return diver;
     }
 
-    public BreathingDevice getBreathingDevice() {
+    public static BreathingDevice getBreathingDevice() {
         return breathingDevice;
     }
 
@@ -52,11 +54,12 @@ public class Dive {
         this.diver = diver;
     }
 
-    public void setBreathingDevice(BreathingDevice breathingDevice) {
-        this.breathingDevice = breathingDevice;
+    public void setBreathingDevice(BreathingDevice breathingDevice){
+        breathingDevice = new BreathingDevice();
     }
 
-    public Dive(String place, String date, double depth, double length,Diver diver,BreathingDevice breathingDevice){
+
+    public Dive(String place, String date, int depth, int length,Diver diver,BreathingDevice breathingDevice){
         this.place = place;
         this.date = date;
         this.depth = depth;
@@ -64,9 +67,17 @@ public class Dive {
         this.diver = diver;
         this.breathingDevice = breathingDevice;
 
+
     }
     public Dive(){
         new Dive("No place entered","No date entered",0,0,getDiver(),getBreathingDevice());
+
+    }
+
+    public String toString(){
+
+        String diveToString = "Place: "+getPlace()+"\nDate: "+getDate()+"\nDepth: "+getDepth()+"\nLength: "+getLength()+"\nDiver: "+getDiver()+"Device used: "+getBreathingDevice();
+        return diveToString;
 
     }
 

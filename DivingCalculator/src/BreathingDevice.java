@@ -1,27 +1,32 @@
-public class BreathingDevice {
+import java.io.Serializable;
 
-    private double tanks;
-    private double size; //Volume of tanks in liters
+public class BreathingDevice implements Serializable {
 
-    public double getTanks() {
+    private static int tanks;
+    private static int size; //Volume of tanks in liters
+
+
+    public static int getTanks() {
         return tanks;
     }
 
-    public double getSize() {
+    public static int getSize() {
         return size;
     }
 
-    public void setTanks(double tanks) {
+
+    public void setTanks(int tanks) {
         this.tanks = tanks;
     }
 
-    public void setSize(double size) {
+    public void setSize(int size) {
         this.size = size;
     }
 
-    public BreathingDevice(double tanks, double size){
+    public BreathingDevice(int tanks, int size){
         setTanks(tanks);
         setSize(size);
+
 
     }
 
@@ -30,7 +35,7 @@ public class BreathingDevice {
     }
 
     public String toString(){
-        String bdToString = "Number of tanks :" +getTanks()+"\nAir volume : "+getSize();
+        String bdToString = "Number of tanks :" +getTanks()+"\nAir pressure needed : "+getSize();
         return bdToString;
 
     }
